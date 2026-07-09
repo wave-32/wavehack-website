@@ -1,0 +1,134 @@
+// Prisma schema for WaveHack hackathon platform.
+// NOTE: SQLite does not support enums, so all status fields are typed as
+// String and validated through TS-level unions (see src/lib/types.ts).
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- Auth ----------
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ---------- Participants ----------
+// status: REGISTERED | CONFIRMED | WAITLISTED | REJECTED
+
+model Participant {
+  id              String   @id @default(cuid())
+  fullName        String
+  email           String   @unique
+  age             Int
+  school          String
+  grade           String
+  location        String
+  codingExperience String
+  skills          String   // CSV of languages/tech
+  teamStatus      String   // team | looking | solo
+  github          String?
+  portfolio       String?
+  prevExperience  String?
+  motivation      String?
+  accessibility   String?
+  status          String   @default("REGISTERED")
+  ip              String?
+  ua              String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// ---------- Volunteers / Team ----------
+// status: SUBMITTED | REVIEWING | ACCEPTED | REJECTED
+// role:   intern   | volunteer | org_team
+
+model VolunteerApplication {
+  id           String   @id @default(cuid())
+  fullName     String
+  email        String   @unique
+  age          Int
+  school       String
+  location     String
+  role         String
+  motivation   String
+  skills       String
+  experience   String?
+  availability String?
+  resumeUrl    String?
+  status       String   @default("SUBMITTED")
+  ip           String?
+  ua           String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ---------- Sponsors ----------
+// status: NEW_INQUIRY | CONTACTED | NEGOTIATING | CONFIRMED | REJECTED
+// partnershipType: sponsor | community | workshop | prize | other
+
+model SponsorInquiry {
+  id                 String   @id @default(cuid())
+  companyName        String
+  contactName        String
+  email              String
+  phone              String?
+  website            String?
+  partnershipType    String
+  orgDescription     String
+  partnershipInterest String
+  supportOffered     String
+  goals              String
+  status             String   @default("NEW_INQUIRY")
+  ip                 String?
+  ua                 String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+// ---------- Contact ----------
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  ip        String?
+  ua        String?
+  createdAt DateTime @default(now())
+}
+
+// ---------- Newsletter ----------
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  ip        String?
+  ua        String?
+  createdAt DateTime @default(now())
+}
+
+// ---------- Editable Site Content ----------
+
+model ContentItem {
+  id        String   @id @default(cuid())
+  kind      String
+  key       String
+  data      String   // JSON
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([kind, key])
+  @@index([kind, order])
+}

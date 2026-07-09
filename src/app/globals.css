@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 3 6 15;
+    --foreground: 230 240 255;
+  }
+  html,
+  body {
+    @apply bg-space-950 text-white antialiased;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(34, 230, 255, 0.08), transparent 45%),
+      radial-gradient(circle at 80% 30%, rgba(168, 85, 247, 0.10), transparent 50%),
+      radial-gradient(circle at 50% 80%, rgba(255, 61, 245, 0.06), transparent 60%);
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: rgba(34, 230, 255, 0.35);
+    color: white;
+  }
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Cleaner scrollbar */
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  *::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(34, 230, 255, 0.35), rgba(168, 85, 247, 0.35));
+    border-radius: 999px;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply relative backdrop-blur-xl bg-white/[0.04] border border-white/10 shadow-glass;
+  }
+  .glass-strong {
+    @apply backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-glass;
+  }
+  .neon-text {
+    background: linear-gradient(120deg, #22e6ff 0%, #a855f7 50%, #ff3df5 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .neon-border {
+    border: 1px solid transparent;
+    background: linear-gradient(#070b1c, #070b1c) padding-box,
+      linear-gradient(120deg, #22e6ff, #a855f7, #ff3df5) border-box;
+  }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: theme("backgroundImage.noise");
+    opacity: 0.35;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent);
+            mask-image: linear-gradient(180deg, #000 70%, transparent);
+  }
+  .mask-radial {
+    -webkit-mask-image: radial-gradient(circle at center, #000 60%, transparent 80%);
+            mask-image: radial-gradient(circle at center, #000 60%, transparent 80%);
+  }
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .gpu {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+}
